@@ -457,27 +457,27 @@ Savings: $264,000 (72% cost reduction)
 
 ## 🚀 Future Scope
 
-### Phase 1: Enhanced Analysis (Q1 2025)
+### Phase 1: Enhanced Analysis (Q1 2026)
 - [ ] **Real AST Parsing** - Actual TypeScript/Angular code analysis
 - [ ] **Runtime Profiling** - Performance monitoring integration
 - [ ] **Custom Rule Engine** - Team-specific pattern detection
 - [ ] **Multi-repo Support** - Analyze monorepo architectures
 
-### Phase 2: Integration & Automation (Q2 2025)
+### Phase 2: Integration & Automation (Q2 2026)
 - [ ] **GitHub Integration** - Direct repository connection
 - [ ] **GitLab Support** - Enterprise version control integration
 - [ ] **Automated Codemods** - One-click refactoring application
 - [ ] **PR Generation** - Automatic pull request creation
 - [ ] **CI/CD Checks** - Modernization quality gates
 
-### Phase 3: Advanced Intelligence (Q3 2025)
+### Phase 3: Advanced Intelligence (Q3 2026)
 - [ ] **Vector Repository Memory** - Semantic code search
 - [ ] **Learning from Migrations** - Improve recommendations over time
 - [ ] **Team Collaboration** - Shared insights and roadmaps
 - [ ] **Custom AI Training** - Fine-tune Bob for your codebase
 - [ ] **Migration Simulation** - Test upgrades in sandbox environments
 
-### Phase 4: Enterprise Features (Q4 2025)
+### Phase 4: Enterprise Features (Q4 2026)
 - [ ] **Multi-framework Support** - React, Vue.js analysis
 - [ ] **Security Scanning** - Vulnerability detection
 - [ ] **Compliance Reporting** - Audit trail generation
@@ -516,7 +516,7 @@ Key challenges that inspired LegacyLens AI:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/legacylens-ai.git
+git clone https://github.com/Mahimamohapatra/legacylens-ai.git
 cd legacylens-ai
 
 # Install dependencies
@@ -560,12 +560,6 @@ npm run lint       # Lint code
 ## 🤝 Contributing
 
 This is a hackathon project, but contributions are welcome! Please feel free to submit issues and pull requests.
-
----
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) file for details
 
 ---
 
@@ -613,7 +607,7 @@ Angular 20 • TypeScript • TailwindCSS • IBM Bob • RxJS • PostCSS
 
 **Built with ❤️ using IBM Bob**
 
-[🌐 Live Demo](#) • [📹 Video Demo](https://www.loom.com/share/8ae4cf8aac34431795efd7166f3a96cf) • [📧 Contact](mailto:mahimamohapatra1@gmail.com)
+[🌐 Live Demo](https://legacylens-ai.vercel.app/) • [📹 Video Demo](https://www.loom.com/share/8ae4cf8aac34431795efd7166f3a96cf) • [📧 Contact](mailto:mahimamohapatra1@gmail.com)
 
 </div>
 
