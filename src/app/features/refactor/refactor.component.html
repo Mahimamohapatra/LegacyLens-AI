@@ -1,0 +1,212 @@
+<div class="min-h-screen bg-bg-primary">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="flex items-center justify-center min-h-screen">
+    <div class="text-center">
+      <div class="spinner mx-auto mb-4"></div>
+      <p class="text-gray-400">Loading refactor suggestions...</p>
+    </div>
+  </div>
+
+  <!-- Refactor Content -->
+  <div *ngIf="!loading" class="animate-fade-in">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 glass-card border-b border-white/10">
+      <div class="max-w-[1800px] mx-auto px-6 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <button
+              (click)="navigateToHome()"
+              class="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+            >
+              <div class="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
+                <span class="text-2xl">🔍</span>
+              </div>
+              <span class="text-xl font-bold gradient-text">LegacyLens AI</span>
+            </button>
+            <div class="h-6 w-px bg-white/20"></div>
+            <div>
+              <h1 class="text-lg font-semibold text-white">AI Refactoring Suggestions</h1>
+              <p class="text-sm text-gray-400">{{ refactorSuggestions.length }} automated improvements</p>
+            </div>
+          </div>
+          <button
+            (click)="navigateToDashboard()"
+            class="px-4 py-2 bg-white/5 text-white rounded-lg font-semibold border border-white/10 hover:bg-white/10 transition-all duration-300"
+          >
+            ← Back to Dashboard
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-[1800px] mx-auto px-6 py-8">
+      <div class="grid grid-cols-12 gap-6">
+        <!-- Suggestions List -->
+        <div class="col-span-12 lg:col-span-4 space-y-4">
+          <div class="glass-card p-4">
+            <h2 class="text-lg font-bold text-white mb-4 flex items-center">
+              <span class="mr-2">📋</span>
+              Suggestions
+            </h2>
+            <div class="space-y-3">
+              <button
+                *ngFor="let suggestion of refactorSuggestions"
+                (click)="selectSuggestion(suggestion)"
+                [class.border-accent-cyan]="selectedSuggestion?.id === suggestion.id"
+                [class.bg-bg-secondary]="selectedSuggestion?.id === suggestion.id"
+                class="w-full text-left p-4 rounded-lg border border-white/10 hover:border-accent-cyan/50 transition-all"
+              >
+                <div class="flex items-start justify-between mb-2">
+                  <h3 class="font-semibold text-white text-sm flex-1">{{ suggestion.title }}</h3>
+                  <span [class]="getConfidenceColor(suggestion.confidence)" class="px-2 py-1 rounded text-xs font-semibold border ml-2">
+                    {{ suggestion.confidence }}%
+                  </span>
+                </div>
+                <div class="flex items-center space-x-2 text-xs">
+                  <span [class]="getEffortBadgeColor(suggestion.effort)" class="px-2 py-1 rounded border">
+                    {{ suggestion.effort }}
+                  </span>
+                  <span [class]="getImpactBadgeColor(suggestion.impact)" class="px-2 py-1 rounded border">
+                    {{ suggestion.impact }}
+                  </span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Comparison Panel -->
+        <div class="col-span-12 lg:col-span-8">
+          <div *ngIf="selectedSuggestion" class="space-y-6">
+            <!-- Header Info -->
+            <div class="glass-card p-6">
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex-1">
+                  <h2 class="text-2xl font-bold text-white mb-2">{{ selectedSuggestion.title }}</h2>
+                  <p *ngIf="selectedSuggestion.fileLocation" class="text-sm text-gray-400 mb-4">
+                    📁 {{ selectedSuggestion.fileLocation }}
+                  </p>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <div class="text-right">
+                    <p class="text-xs text-gray-400 mb-1">AI Confidence</p>
+                    <div class="flex items-center space-x-2">
+                      <span [class]="getConfidenceColor(selectedSuggestion.confidence)" class="text-2xl font-bold px-3 py-1 rounded border">
+                        {{ selectedSuggestion.confidence }}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Confidence Bar -->
+              <div class="w-full bg-gray-700 rounded-full h-2 mb-4">
+                <div
+                  [class]="'h-2 rounded-full bg-gradient-to-r ' + getConfidenceBarColor(selectedSuggestion.confidence)"
+                  [style.width.%]="selectedSuggestion.confidence"
+                ></div>
+              </div>
+
+              <!-- Badges -->
+              <div class="flex items-center space-x-3">
+                <span [class]="getEffortBadgeColor(selectedSuggestion.effort)" class="px-3 py-1.5 rounded-lg text-sm font-semibold border">
+                  {{ selectedSuggestion.effort | uppercase }} EFFORT
+                </span>
+                <span [class]="getImpactBadgeColor(selectedSuggestion.impact)" class="px-3 py-1.5 rounded-lg text-sm font-semibold border">
+                  {{ selectedSuggestion.impact | uppercase }} IMPACT
+                </span>
+              </div>
+            </div>
+
+            <!-- AI Explanation -->
+            <div class="glass-card p-6">
+              <h3 class="text-lg font-bold text-white mb-3 flex items-center">
+                <span class="mr-2">🤖</span>
+                AI Analysis
+              </h3>
+              <p class="text-gray-300 leading-relaxed">{{ selectedSuggestion.explanation }}</p>
+            </div>
+
+            <!-- Code Comparison -->
+            <div class="glass-card p-6">
+              <h3 class="text-lg font-bold text-white mb-4 flex items-center">
+                <span class="mr-2">🔄</span>
+                Code Comparison
+              </h3>
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <!-- Before -->
+                <div class="bg-bg-secondary rounded-lg border border-red-500/30 overflow-hidden">
+                  <div class="bg-red-500/20 px-4 py-2 border-b border-red-500/30">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm font-semibold text-red-400">❌ Before</span>
+                      <span class="text-xs text-gray-400">Current Code</span>
+                    </div>
+                  </div>
+                  <div class="p-4 overflow-x-auto">
+                    <pre class="text-sm text-gray-300"><code>{{ selectedSuggestion.before }}</code></pre>
+                  </div>
+                </div>
+
+                <!-- After -->
+                <div class="bg-bg-secondary rounded-lg border border-green-500/30 overflow-hidden">
+                  <div class="bg-green-500/20 px-4 py-2 border-b border-green-500/30">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm font-semibold text-green-400">✅ After</span>
+                      <span class="text-xs text-gray-400">Suggested Code</span>
+                    </div>
+                  </div>
+                  <div class="p-4 overflow-x-auto">
+                    <pre class="text-sm text-gray-300"><code>{{ selectedSuggestion.after }}</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Benefits -->
+            <div class="glass-card p-6">
+              <h3 class="text-lg font-bold text-white mb-4 flex items-center">
+                <span class="mr-2">✨</span>
+                Benefits
+              </h3>
+              <div class="space-y-3">
+                <div
+                  *ngFor="let benefit of selectedSuggestion.benefits"
+                  class="flex items-start space-x-3 bg-bg-secondary p-4 rounded-lg border border-white/10"
+                >
+                  <span class="text-green-400 text-xl">✓</span>
+                  <p class="text-gray-300 text-sm flex-1">{{ benefit }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="glass-card p-6">
+              <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-400">
+                  <p class="mb-1">This is a demo suggestion for hackathon purposes.</p>
+                  <p>In production, you would be able to apply changes directly.</p>
+                </div>
+                <div class="flex space-x-3">
+                  <button class="px-6 py-3 bg-white/5 text-white rounded-lg font-semibold border border-white/10 hover:bg-white/10 transition-all">
+                    Dismiss
+                  </button>
+                  <button class="px-6 py-3 bg-gradient-primary text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-cyan-500/50 transition-all">
+                    Apply Refactor
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="!selectedSuggestion" class="glass-card p-12 text-center">
+            <div class="text-6xl mb-4">🔍</div>
+            <h3 class="text-xl font-bold text-white mb-2">Select a Suggestion</h3>
+            <p class="text-gray-400">Choose a refactoring suggestion from the list to view details</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
